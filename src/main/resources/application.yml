@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: GenAI-Rabiloo
+  ai:
+    openai:
+      api-key: AIzaSyCjUuY8NeXsUDztnDCb3b1JrLuk3Pr1qkw
+      chat:
+        base-url: https://generativelanguage.googleapis.com
+        completions-path: /v1beta/openai/chat/completions
+        options:
+          model: gemini-2.0-flash
+
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
