@@ -35,7 +35,7 @@ public class AudioTranscriptionService {
     }
 
 
-    public String chatWithImage(MultipartFile file, String language){
+    public String audioTranscription(MultipartFile file){
         Media media = Media.builder()
                 .mimeType(MimeTypeUtils.parseMimeType(file.getContentType()))
                 .data(file.getResource())
@@ -46,14 +46,18 @@ public class AudioTranscriptionService {
                 .build();
 
         // Prompt mặc định nếu không có custom message
-        String message = Transcript.TRANSCRIPT_AUDIO.getValue().formatted(language, language);
+        String message = Transcript.TRANSCRIPT_AUDIO.getValue();
 
-        return chatClient.prompt()
+        String response = chatClient.prompt()
                 .system("Bạn là trợ lý của DEV Tran")
                 .options(chatOptions)
                 .user(u->u.media(media).text(message))
                 .call()
                 .content();
+
+        log.info("Thông tin hội thoại: {}",response);
+
+        return response;
     }
 
     public List<Message> getChatHistory(String conversationId) {
