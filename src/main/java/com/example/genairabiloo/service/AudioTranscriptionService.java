@@ -1,6 +1,7 @@
 package com.example.genairabiloo.service;
 
 import com.example.genairabiloo.Enums.Transcript;
+import com.example.genairabiloo.dto.Convenstation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -8,6 +9,7 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.messages.Message;
 import org.springframework.ai.chat.prompt.ChatOptions;
 import org.springframework.ai.content.Media;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,7 +37,7 @@ public class AudioTranscriptionService {
     }
 
 
-    public String audioTranscription(MultipartFile file){
+    public List<Convenstation> audioTranscription(MultipartFile file){
         Media media = Media.builder()
                 .mimeType(MimeTypeUtils.parseMimeType(file.getContentType()))
                 .data(file.getResource())
@@ -48,12 +50,13 @@ public class AudioTranscriptionService {
         // Prompt mặc định nếu không có custom message
         String message = Transcript.TRANSCRIPT_AUDIO.getValue();
 
-        String response = chatClient.prompt()
+        List<Convenstation> response = chatClient.prompt()
                 .system("Bạn là trợ lý của DEV Tran")
                 .options(chatOptions)
                 .user(u->u.media(media).text(message))
                 .call()
-                .content();
+                .entity(new ParameterizedTypeReference<List<Convenstation>>() {
+                });
 
         log.info("Thông tin hội thoại: {}",response);
 

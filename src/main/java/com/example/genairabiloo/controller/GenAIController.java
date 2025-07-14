@@ -1,6 +1,7 @@
 package com.example.genairabiloo.controller;
 
 import com.example.genairabiloo.dto.AudioRequest;
+import com.example.genairabiloo.dto.Convenstation;
 import com.example.genairabiloo.service.AudioTranscriptionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.messages.Message;
@@ -16,7 +17,7 @@ public class GenAIController {
 
     private final AudioTranscriptionService genAIService;
 
-    @GetMapping(value = "/chat1")
+    @GetMapping(value = "/chat")
     public String chatWithAI(@RequestParam String message){
        return genAIService.chatWithAI(message);
     }
@@ -27,7 +28,7 @@ public class GenAIController {
     }
 
     @PostMapping(value = "/transcription")
-    public String audioTranscription(@ModelAttribute AudioRequest audioRequest){
-        return genAIService.audioTranscription(audioRequest.audioFile());
+    public List<Convenstation> audioTranscription(@ModelAttribute AudioRequest audioRequest){
+        return genAIService.audioTranscription(audioRequest.getAudioFile());
     }
 }
